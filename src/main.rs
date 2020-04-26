@@ -19,7 +19,7 @@ fn main() {
         usage();
     }
 
-    let target_socket: PathBuf = fs::canonicalize(args.remove(1))
-                                    .expect("Error canonicalizing path");
+    let target_socket: PathBuf =
+        fs::canonicalize(args.remove(1)).expect("Error canonicalizing path");
     info!("targ socket: {:?}", target_socket);
 }

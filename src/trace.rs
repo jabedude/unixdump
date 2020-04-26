@@ -1,9 +1,9 @@
-use nix::unistd::Pid;
 use nix::sys::ptrace;
+use nix::unistd::Pid;
 
 use crate::errors::*;
 
-pub (crate) fn trace_read(pid: Pid) -> Result<()> {
+pub(crate) fn trace_read(pid: Pid) -> Result<()> {
     ptrace::seize(pid, ptrace::Options::PTRACE_O_TRACESYSGOOD)?;
     Ok(())
 }
@@ -11,9 +11,9 @@ pub (crate) fn trace_read(pid: Pid) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nix::unistd::{fork, ForkResult};
-    use nix::unistd::execv;
     use nix::sys::signal::{kill, Signal};
+    use nix::unistd::execv;
+    use nix::unistd::{fork, ForkResult};
     use std::ffi::CString;
 
     #[test]
@@ -25,10 +25,19 @@ mod tests {
                 eprintln!("{:?}", trace_read(child));
                 kill(child, Some(Signal::SIGKILL)).unwrap();
                 let _ = std::fs::remove_file(&path);
-            },
+            }
             Ok(ForkResult::Child) => {
-                execv(&CString::new("/bin/nc").unwrap(), &[&CString::new("/bin/nc").unwrap(), &CString::new("-U").unwrap(), &CString::new(path).unwrap(), &CString::new("-l").unwrap()]).unwrap();
-            },
+                execv(
+                    &CString::new("/bin/nc").unwrap(),
+                    &[
+                        &CString::new("/bin/nc").unwrap(),
+                        &CString::new("-U").unwrap(),
+                        &CString::new(path).unwrap(),
+                        &CString::new("-l").unwrap(),
+                    ],
+                )
+                .unwrap();
+            }
             Err(_) => panic!("Fork failed"),
         }
     }
