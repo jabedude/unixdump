@@ -7,8 +7,12 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+error-chain = { version = "^0.12.1", default-features = false }
 env_logger = "0.7.1"
 libc = "0.2.69"
 log = "0.4.0"
 nix = "0.17.0"
 ofiles = { git = "https://github.com/jabedude/ofiles" }
+
+[dev-dependencies]
+rusty-fork = "0.2.2"
